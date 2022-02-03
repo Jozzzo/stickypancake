@@ -5,30 +5,37 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float ms = 6;
-    
+
     private Rigidbody2D rb;
     private Vector3 velocityToUpdate;
+    private float ScreenWidth;
+    private Touch touch;
+    private bool previousWasTouching = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         velocityToUpdate = new Vector3(0f, 0f, 0f);
+        ScreenWidth = Screen.width;
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-        if (Input.GetKey(KeyCode.UpArrow))
+        bool isTouching = Input.touchCount > 0;
+        if (isTouching && !previousWasTouching)
         {
-            transform.Translate(Vector3.up * ms * Time.deltaTime);
-            GetComponent<Rigidbody2D>().velocity = velocityToUpdate; 
-        }
+                if (touch.position.x > ScreenWidth / 2)
+                {
+                    transform.Translate(Vector3.up * ms * Time.deltaTime);
+                    GetComponent<Rigidbody2D>().velocity = velocityToUpdate;
+                }
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(Vector3.down * ms * Time.deltaTime);
-            GetComponent<Rigidbody2D>().velocity = velocityToUpdate;
+                if (touch.position.x < ScreenWidth / 2)
+                {
+                    transform.Translate(Vector3.down * ms * Time.deltaTime);
+                    GetComponent<Rigidbody2D>().velocity = velocityToUpdate;
+                    previousWasTouching = isTouching;
+                }
         }
-        
     }
 }

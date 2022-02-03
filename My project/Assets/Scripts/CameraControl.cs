@@ -8,9 +8,10 @@ public class CameraControl : MonoBehaviour
     public Transform StartCamera;
     public Transform bg1;
     public Transform bg2;
-
     public float n = 5;
+
     private float size;
+    private float initialTargetPos;
 
     private Vector3 cameraTargetPos = new Vector3();
     private Vector3 bg1TargetPos = new Vector3();
@@ -19,12 +20,13 @@ public class CameraControl : MonoBehaviour
     void Start()
     {
         size = bg1.GetComponent<BoxCollider2D>().size.y;
+        initialTargetPos = target.position.x;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 targetPos = SetPos(cameraTargetPos, target.position.x, target.position.y+n, transform.position.z);
+        Vector3 targetPos = SetPos(cameraTargetPos, initialTargetPos, target.position.y+n, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, targetPos, 0.030f);
         n=0;
         
